@@ -1,0 +1,89 @@
+Kubernetes project for web app.
+
+-Install node JS
+-Create folder in Local system (Any name)
+-Open folder in vs code
+-Open terminal and check node install or not -> node -v
+-We want to create react base app 
+-npx create-react-app testapp (testapp is folder name) Create react app =Y
+-change directory type -> cd testapp (folder name) 
+-type npm start (web page start)
+-Create Docker file in vs code under testapp
+************ 
+FROM node
+WORKDIR /myapp
+COPY . .
+RUN npm install
+EXPOSE 3000
+CMD ["npm","start"]
+************ 
+-Make image to use in Kubernetes -(Image can not save in local repo so save in Docker hub and make naming as per repo)
+-Steps-->Open Docker hub and sign and create repository any name kubernetes_project (copy name eg. surdas96/kubernetes_project:tagname )
+-create image - Docker build -t surdas96/kubernetes_project:01 . (dot for copy/add files)
+(tagname = version any) This is image created Locally
+-Now Run Docker login 
+-Push image in repo --> Docker push surdas96/kubernetes_project:01 (Image name) 
+-Now Deploy Project in Kubernetes
+-Check status -> minikube status (if stop then run minikube start)
+-kubectl create deployment my-webapp(any name) --image=surdas96/kubernetes_project:01
+-To check -> kubectl get deployment (also you can check in dashboard)
+-kubectl expose deployment my-webapp --type=LoadBalancer --port=3000
+(To expose and access through browser)
+-minikube service my-webapp (Your application will be open)
+****************************************************************
+
+# Rollout in K8 (To change in live project)
+-Go to src folder -App.js edit section add simple any name (DEMO PROJECT FOR KUBERNETES)
+-Now we have create new image 
+- Docker build -t surdas96/kubernetes_project:02 . -(With version 02)
+- Docker push surdas96/kubernetes_project:02
+- To update live web site to less running down time we need to point old image with new image 
+- kubectl set image deployment my-webapp(created earlier) kubernetes-project-7p77g=surdas96/kubernetes_project:02 
+- kubernetes-project-7p77g is container name -Go to minikube dashboard -click on pods -click on your image -scroll down you will see container copy name 
+- Your version 01 image will be updated with version 02. 
+- If you check kubectl get pods (old pod running in status after some it will be in terminating status and after that it will start running 2nd pod)
+-If you check container under pods it will pointing 2nd version.
+-Now run --> minikube service my-webapp 
+This is now showing new changes in browser. 
+-If you again change in version 01 in above command it will show old changes again. 
+****************************************************************
+
+# RollBack Rollout in K8 (To change in live project)
+- Without setting new image of version 03
+- kubectl set image deployment my-webapp kubernetesproject-7p77g=surdas96/kubernetes_project:03 
+- Image updated but k8 try to pull image check -> kubectl get pods
+it will show ImagePullBackOf off.
+- kubectl rollout status deployment my-webapp
+-It will show Waiting for deployment "my-webapp" rollout to finish: 1 old replicas are pending termination --this is trying to complete old pods and run new pods but it will not happen bcz version 06 is not present 
+- Now how to rollback use -> kubectl rollout undo deployment my-webapp
+- To check kubectl get pods old my-web app running.
+**************************************************************
+
+# Self Healing in K8s.
+- Open folder db-demo-app in vs code saved in my local system.
+- Run npm install and run node index.js
+- make image and add in docker hub 
+- Docker build -t surdas96/db-demo-app:01 . 
+- Docker push surdas96/db-demo-app:01 
+- kubectl create deployment node-app --image=surdas96/db-demo-app:01
+- kubectl expose deployment node-app --type=LoadBalancer --port=3000
+- minikube service node-app
+
+# Scaling 
+- To disturbed or handle traffic in live web app
+- kubectl scale deployment node-app --replicas=2 (2 is pods any you can choose)
+
+# YAML Config for deployment
+- Copy code from https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#deployment-v1-apps
+-Create one file in VS code deployment-node-app.yml
+- Check minikube status and start if stopped 
+-Run -kubectl apply -f deployment-node-app.yml (file name)
+-Your deployment is created.
+
+# YAML Config for service
+- Copy code from 
+https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#service-v1-core
+-Create file service-node-app.yml
+-Run -kubectl apply -f service-node-app.yml (file name)
+-Your service is created.
+-Run -minikube service service-node-app
