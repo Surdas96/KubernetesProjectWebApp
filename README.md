@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# This is project shows how to deploy a web app using kubernetes 
+# I have added completed steps guide text file for reference. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Below i added some screenshot and sample steps for understanding. 
 
-## Available Scripts
+# create react base app 
+-npx create-react-app testapp
 
-In the project directory, you can run:
+![testapp](https://github.com/user-attachments/assets/9791b942-aa02-4210-9806-d59c008f6c4e)
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Create Docker file in vs code under testapp
 
-### `npm test`
+![Docker file](https://github.com/user-attachments/assets/e0dc67a9-6ee1-4604-b7f5-fb0a9b184669)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+# create repository in docker hub to publish 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![dockerhub](https://github.com/user-attachments/assets/f64cf308-c0b9-4c2c-93b9-1eeb4f74a253)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# create image - Docker build -t surdas96/kubernetes_project:01 .
+# and Push image in repo --> Docker push surdas96/kubernetes_project:01
 
-### `npm run eject`
+![docker image](https://github.com/user-attachments/assets/8ca273a8-0e80-40ed-9035-30b2ac02b4fa)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+![image pushed](https://github.com/user-attachments/assets/b656956b-341b-4231-b476-d6e8523ce7c5)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# create deployment 
+-Command : - kubectl create deployment my-webapp(any name) --image=surdas96/kubernetes_project:01
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![minikube dashboard](https://github.com/user-attachments/assets/bec924d2-a733-416a-bf98-ea2206e854c2)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+# To check Deployment -> 
+Command : - kubectl get deployment
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![kubectl create deployment](https://github.com/user-attachments/assets/297c90ba-651e-476e-ac4f-df3a936db3c7)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Expose deployment and 
+Command : - kubectl expose deployment my-webapp --type=LoadBalancer --port=3000
 
-### Code Splitting
+![minikube dashboard](https://github.com/user-attachments/assets/c49e89d5-5f45-4aba-be41-57ba54760bd8)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# to open web app 
 
-### Analyzing the Bundle Size
+Command : - minikube service my-webapp
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+![minikube expose](https://github.com/user-attachments/assets/cc73bc35-b023-418d-b237-c7670572c400)
 
-### Making a Progressive Web App
+![react app](https://github.com/user-attachments/assets/5e0a7234-f66d-42f9-822d-b736d5e402fc)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
