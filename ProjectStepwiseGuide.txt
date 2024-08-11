@@ -24,7 +24,7 @@ CMD ["npm","start"]
 -Now Run Docker login 
 -Push image in repo --> Docker push surdas96/kubernetes_project:01 (Image name) 
 -Now Deploy Project in Kubernetes
--Check status -> minikube status (if stop then run minikube start)
+-Check status -> minikube status (if stop then run minikube start and run minikube dashboard)
 -kubectl create deployment my-webapp(any name) --image=surdas96/kubernetes_project:01
 -To check -> kubectl get deployment (also you can check in dashboard)
 -kubectl expose deployment my-webapp --type=LoadBalancer --port=3000
